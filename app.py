@@ -15,7 +15,7 @@ import numpy as np
 # 2. Flask 객체를 app 변수에 할당한다.
 app = Flask(__name__)
 # load the model file which is already trained.
-model = joblib.load('./model_train_32x32.pkl')
+#model = joblib.load('./model_train_32x32.pkl')
 
 
 ''' make Database using mongoDB '''
@@ -58,7 +58,7 @@ l1.save()
 file = l1.file.read()
 '''
 
-buildDB = BuildDB()
+#buildDB = BuildDB()
 
 '''
 buildDB.insertDataToDataBase('1', '1.aedat4')
@@ -101,6 +101,7 @@ def hello():
 def hello_flask(username):
     return "profile: " + username
 
+
 @app.route("/array")
 def send_array():
     items = [
@@ -109,6 +110,7 @@ def send_array():
         {'id': 78, 'content': "참아야 한다고 배워 힘든걸 참고 행복도 참게 되었다. 이것도 ㅆㅇㅈ"},
     ]
     return json.dumps(items)
+
 
 # 이미지 파일은 HTTP POST 요청을 통해서 보내진다.
 # aedat file도 마찬가지라고 생각한다.
@@ -130,7 +132,8 @@ def make_prediciton():
         print('image: ', img.shape)
         print('여기서 문제가 발생하는듯?')
         # 입력 받은 이미지 예측
-        prediction = model.predict(img)
+        #prediction = model.predict(img)
+        prediction = [['10']]
         print('여기서 문제가 발생하는듯?')
         # 예측 값을 1차원 배열로부터 확인 가능한 문자열로 변환
         label = str(np.squeeze(prediction))
@@ -141,6 +144,7 @@ def make_prediciton():
         print(label)
         return render_template('index.html', label="Your image is {}".format(label))
 
+'''
 @app.route("/upload", methods=['POST'])
 def upload():
     ## file upload ##
@@ -159,11 +163,13 @@ def upload():
     output = open('./images/' + 'back.png', 'wb')
     output.write(outputdata)
     return jsonify({'msg': 'save complete'})
+'''
 
 # 5. 메인 모듈로 실행할 때 플라스크 서버가 구동된다. (서버로 구동한 IP와 포트를 옵션으로 넣어줄 수 있다.)
 host_addr = "192.168.55.231"
 local_addr = "127.0.0.1"
-port_num = "8080"
+open_addr = "0.0.0.0"
+port_num = "8888"
 
 if __name__ == '__main__':
     app.run(host=local_addr, port=port_num, debug=True)
