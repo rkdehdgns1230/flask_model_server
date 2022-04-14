@@ -170,7 +170,7 @@ def upload():
 host_addr = "192.168.55.231"
 local_addr = "127.0.0.1"
 open_addr = "0.0.0.0"
-port_num = "8888"
+port_num = "8080"
 
 if __name__ == '__main__':
     app.run(host=open_addr, port=port_num, debug=True)
