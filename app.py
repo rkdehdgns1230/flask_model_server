@@ -117,11 +117,13 @@ def send_array():
 # aedat file도 마찬가지라고 생각한다.
 @app.route('/predict', methods=['POST'])
 def make_prediciton():
+    # check HTTP method using request object.
     if request.method == 'POST':
 
         # 업로드 파일 처리 분기
         file = request.files['image']
         if not file:
+            # load the 'index.html' file in templates folder.
             return render_template('index.html', label="No Files")
 
         # 이미지 픽셀 정보 읽기
@@ -131,11 +133,11 @@ def make_prediciton():
         img = img[:, :, :3]
         img = img.reshape(1, -1)
         print('image: ', img.shape)
-        print('여기서 문제가 발생하는듯?')
+
         # 입력 받은 이미지 예측
         #prediction = model.predict(img)
         prediction = [['10']]
-        print('여기서 문제가 발생하는듯?')
+
         # 예측 값을 1차원 배열로부터 확인 가능한 문자열로 변환
         label = str(np.squeeze(prediction))
 
