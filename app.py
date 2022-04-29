@@ -2,7 +2,7 @@
 from flask import Flask, render_template, request, jsonify
 # import pymongo for using MongoDB
 from pymongo import MongoClient
-# import werkzeug for secure_filename method
+# import werkzeug.utils(>=1.0.0 version) for secure_filename method
 from werkzeug.utils import secure_filename
 
 from mongoengine import *
@@ -104,18 +104,9 @@ def hello_flask(username):
     return "profile: " + username
 
 
-@app.route("/array")
-def send_array():
-    items = [
-        {'id': 12, 'content': "세상은 호락호락하지 않다. 괜찮다. 나도 호락호락하지 않다. ㅇㅈ"},
-        {'id': 45, 'content': "공부를 많이 하면 공부가 늘고 걱정을 많이 하면 걱정이 는다. 이것도 ㅇㅈ"},
-        {'id': 78, 'content': "참아야 한다고 배워 힘든걸 참고 행복도 참게 되었다. 이것도 ㅆㅇㅈ"},
-    ]
-    return json.dumps(items)
-
-
 ALLOWED_EXTENSIONS = set(['aedat4', 'aedat'])
-
+# representing upload folder
+UPLOAD_FOLDER = '/images'
 
 def allowed_file(filename):
     # filename contains '.' and file type is allowed.
@@ -134,8 +125,10 @@ def make_prediciton():
         file = request.files['aedat']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # 이미지 픽셀 정보 읽기
             # 알파 채널 값 제거 후 1차원 reshape
+            '''
             img = imageio.imread(file)
             print("image.shape: ", img.shape)
             img = img[:, :, :3]
@@ -145,10 +138,11 @@ def make_prediciton():
             # 입력 받은 이미지 예측
             #prediction = model.predict(img)
             prediction = [['10']]
-
+            
             # 예측 값을 1차원 배열로부터 확인 가능한 문자열로 변환
             label = str(np.squeeze(prediction))
-
+            '''
+            label = '3'
             # 숫자가 10인 경우 0으로 처리한다.
             if(label == '10'):
                 label = '0'
