@@ -113,6 +113,15 @@ def send_array():
     return json.dumps(items)
 
 
+ALLOWED_EXTENSIONS = set(['aedat4', 'aedat'])
+
+
+def allowed_file(filename):
+    # filename contains '.' and file type is allowed.
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
 # 이미지 파일은 HTTP POST 요청을 통해서 보내진다.
 # aedat file도 마찬가지라고 생각한다.
 @app.route('/predict', methods=['POST'])
