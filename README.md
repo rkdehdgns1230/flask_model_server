@@ -1,5 +1,5 @@
-# Flask_model_server
-web server code for deep learning model service
+# Flask_API_model_server
+web API server code for SLAYER model(WBC detector) service
 <br>
 
 ## Version Info
