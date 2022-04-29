@@ -2,12 +2,13 @@
 from flask import Flask, render_template, request, jsonify
 # import pymongo for using MongoDB
 from pymongo import MongoClient
-
+# import werkzeug for secure_filename method
+from werkzeug.utils import secure_filename
 
 from mongoengine import *
 
 import gridfs
-
+import os
 import imageio
 import json
 import joblib
@@ -132,6 +133,7 @@ def make_prediciton():
         # 업로드 파일 처리 분기
         file = request.files['aedat']
         if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
             # 이미지 픽셀 정보 읽기
             # 알파 채널 값 제거 후 1차원 reshape
             img = imageio.imread(file)
