@@ -130,31 +130,32 @@ def make_prediciton():
     if request.method == 'POST':
 
         # 업로드 파일 처리 분기
-        file = request.files['image']
-        if not file:
+        file = request.files['aedat']
+        if file and allowed_file(file.filename):
+            # 이미지 픽셀 정보 읽기
+            # 알파 채널 값 제거 후 1차원 reshape
+            img = imageio.imread(file)
+            print("image.shape: ", img.shape)
+            img = img[:, :, :3]
+            img = img.reshape(1, -1)
+            print('image: ', img.shape)
+
+            # 입력 받은 이미지 예측
+            #prediction = model.predict(img)
+            prediction = [['10']]
+
+            # 예측 값을 1차원 배열로부터 확인 가능한 문자열로 변환
+            label = str(np.squeeze(prediction))
+
+            # 숫자가 10인 경우 0으로 처리한다.
+            if(label == '10'):
+                label = '0'
+            print(label)
+            return render_template('index.html', label="Your image is {}".format(label))
+        else:
             # load the 'index.html' file in templates folder.
             return render_template('index.html', label="No Files")
 
-        # 이미지 픽셀 정보 읽기
-        # 알파 채널 값 제거 후 1차원 reshape
-        img = imageio.imread(file)
-        print("image.shape: ", img.shape)
-        img = img[:, :, :3]
-        img = img.reshape(1, -1)
-        print('image: ', img.shape)
-
-        # 입력 받은 이미지 예측
-        #prediction = model.predict(img)
-        prediction = [['10']]
-
-        # 예측 값을 1차원 배열로부터 확인 가능한 문자열로 변환
-        label = str(np.squeeze(prediction))
-
-        # 숫자가 10인 경우 0으로 처리한다.
-        if(label == '10'):
-            label = '0'
-        print(label)
-        return render_template('index.html', label="Your image is {}".format(label))
 
 '''
 @app.route("/upload", methods=['POST'])
