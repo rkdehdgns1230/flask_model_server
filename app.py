@@ -1,5 +1,5 @@
 # 1. Flask 모듈을 import 한다.
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, url_for, redirect
 # import pymongo for using MongoDB
 from pymongo import MongoClient
 # import werkzeug.utils(>=1.0.0 version) for secure_filename method
@@ -127,7 +127,10 @@ def make_prediciton():
         file = request.files['aedat']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            # os.path.join method return UPLOAD_FOLDER/filename
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            return redirect(url_for('uploaded_file', filename=filename))
             # 이미지 픽셀 정보 읽기
             # 알파 채널 값 제거 후 1차원 reshape
             '''
