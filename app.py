@@ -91,6 +91,7 @@ DELETE: URL에 지정된 대상을 삭제(DELETE)하는데 사용
 @app.route("/")
 def main():
     return render_template('index.html')
+
 '''
 def hello():
     user = request.form.get('uesr')
@@ -98,6 +99,7 @@ def hello():
     data = {'level': 60, 'point': 360, 'exp': 45000}
     return render_template('index.html', data=data, user=user)
 '''
+
 # 여러 개의 복잡한 URI를 함수로 쉽게 연결하는 방법을 제공한다.
 @app.route("/profile/<username>")
 def hello_flask(username):
