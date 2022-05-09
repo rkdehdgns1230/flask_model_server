@@ -172,7 +172,7 @@ def showResult(filename):
         if filename is None:
             pass
         else:
-            image_data = open(os.path.join(file_dir, '%s' % filename))
+            image_data = open(os.path.join(file_dir, '%s' % filename), "rb").read()
             response = make_response(image_data)
             response.headers['Content-Type'] = 'image/png'
             return response
@@ -182,7 +182,7 @@ def showResult(filename):
 # 5. 메인 모듈로 실행할 때 플라스크 서버가 구동된다. (서버로 구동한 IP와 포트를 옵션으로 넣어줄 수 있다.)
 local_addr = "127.0.0.1"
 open_addr = "0.0.0.0"
-port_num = "8080"
+port_num = "5000"
 
 if __name__ == '__main__':
-    app.run(host=open_addr, port=port_num, debug=True)
+    app.run(host=open_addr)
