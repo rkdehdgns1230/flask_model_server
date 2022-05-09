@@ -122,6 +122,8 @@ def make_prediciton():
 @app.route("/send_post", methods=['POST'])
 def send_post():
     if request.method == 'POST':
+        if "file" not in request.files:
+            return "No file in your request!"
         file = request.files['file']
         string = request.form['string']
         return string
