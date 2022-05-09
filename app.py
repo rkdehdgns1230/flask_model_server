@@ -126,14 +126,14 @@ def send_post():
             return "No file in your request!"
         file = request.files['file']
         string = request.form['string']
-        return string
-
-        fileName = secure_filename(file.filename);
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], fileName))
-
-        return "Complete"
+        try:
+            fileName = secure_filename(file.filename)
+            file.save("./images/" + fileName)
+            return fileName
+        except:
+            return "file save error!", 200
     else:
-        return "No File!"
+        return "No File!", 200
 '''
 @app.route("/upload", methods=['POST'])
 def upload():
