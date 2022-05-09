@@ -100,15 +100,25 @@ def make_prediciton():
     # check HTTP method using request object.
     if request.method == 'POST':
 
+        if "file" not in request.files:
+            return "No file in your request!"
+
         # 업로드 파일 처리 분기
         file = request.files['file']
+        string = request.form['string']
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+            try:
+                fileName = secure_filename(file.filename)
+                file.save("./images/" + fileName)
+                return fileName
+            except:
+                return "file save error!", 200
             # os.path.join method return UPLOAD_FOLDER/filename
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            #file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-            return redirect(url_for('uploaded_file', filename=filename))
-
+            '''
+            model should be imported in this section
+            '''
             label = '3'
             # 숫자가 10인 경우 0으로 처리한다.
             if(label == '10'):
