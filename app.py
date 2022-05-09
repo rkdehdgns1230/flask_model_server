@@ -1,5 +1,5 @@
 # 1. Flask 모듈을 import 한다.
-from flask import Flask, render_template, request, jsonify, url_for, redirect
+from flask import Flask, render_template, request, jsonify, url_for, redirect, make_response
 # import pymongo for using MongoDB
 from pymongo import MongoClient
 # import werkzeug.utils(>=1.0.0 version) for secure_filename method
@@ -164,6 +164,20 @@ def upload():
     output.write(outputdata)
     return jsonify({'msg': 'save complete'})
 '''
+
+@app.route('/show/<string:filename>', methods=['GET'])
+def showResult(filename):
+    file_dir = os.path.join("./upload")
+    if request.method == 'GET':
+        if filename is None:
+            pass
+        else:
+            image_data = open(os.path.join(file_dir, '%s' % filename))
+            response = make_response(image_data)
+            response.headers['Content-Type'] = 'image/png'
+            return response
+    else:
+        pass
 
 # 5. 메인 모듈로 실행할 때 플라스크 서버가 구동된다. (서버로 구동한 IP와 포트를 옵션으로 넣어줄 수 있다.)
 local_addr = "127.0.0.1"
