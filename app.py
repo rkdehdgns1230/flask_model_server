@@ -157,6 +157,9 @@ def make_prediciton():
             # load the 'index.html' file in templates folder.
             return render_template('index.html', label="No Files")
 
+@app.route("/send_post", methods=['GET'])
+def send_post():
+    return 'return from API server'
 
 '''
 @app.route("/upload", methods=['POST'])
