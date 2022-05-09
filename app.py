@@ -99,7 +99,7 @@ def make_prediciton():
     if request.method == 'POST':
 
         # 업로드 파일 처리 분기
-        file = request.files['aedat']
+        file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             # os.path.join method return UPLOAD_FOLDER/filename
