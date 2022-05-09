@@ -43,23 +43,6 @@ class BuildDB:
     def eraseData(self, _id):
         self.db.data.find_one({'file_id': _id})
 
-class lang(Document):
-    file_id = StringField()
-    file_name = StringField()
-    file = FileField()
-'''
-con = connect('newdb')
-
-l1 = lang()
-l1.file_id = '1',
-l1.file_name = 'test_img_1.png'
-f = open('test_images/test_img_1.png')
-l1.file.put(f, content_type='image/png')
-l1.save()
-
-file = l1.file.read()
-'''
-
 #buildDB = BuildDB()
 
 '''
@@ -92,14 +75,6 @@ DELETE: URL에 지정된 대상을 삭제(DELETE)하는데 사용
 def main():
     return render_template('index.html')
 
-'''
-def hello():
-    user = request.form.get('uesr')
-    print(user)
-    data = {'level': 60, 'point': 360, 'exp': 45000}
-    return render_template('index.html', data=data, user=user)
-'''
-
 # 여러 개의 복잡한 URI를 함수로 쉽게 연결하는 방법을 제공한다.
 @app.route("/profile/<username>")
 def hello_flask(username):
@@ -131,22 +106,7 @@ def make_prediciton():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             return redirect(url_for('uploaded_file', filename=filename))
-            # 이미지 픽셀 정보 읽기
-            # 알파 채널 값 제거 후 1차원 reshape
-            '''
-            img = imageio.imread(file)
-            print("image.shape: ", img.shape)
-            img = img[:, :, :3]
-            img = img.reshape(1, -1)
-            print('image: ', img.shape)
 
-            # 입력 받은 이미지 예측
-            #prediction = model.predict(img)
-            prediction = [['10']]
-            
-            # 예측 값을 1차원 배열로부터 확인 가능한 문자열로 변환
-            label = str(np.squeeze(prediction))
-            '''
             label = '3'
             # 숫자가 10인 경우 0으로 처리한다.
             if(label == '10'):
@@ -157,10 +117,19 @@ def make_prediciton():
             # load the 'index.html' file in templates folder.
             return render_template('index.html', label="No Files")
 
-@app.route("/send_post", methods=['GET'])
+@app.route("/send_post", methods=['POST'])
 def send_post():
-    return 'return from API server'
+    if request.method == 'POST':
+        file = request.files['file']
+        string = request.form['string']
+        return string
 
+        fileName = secure_filename(file.filename);
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], fileName))
+
+        return "Complete"
+    else:
+        return "No File!"
 '''
 @app.route("/upload", methods=['POST'])
 def upload():
