@@ -19,6 +19,10 @@ app = Flask(__name__)
 # load the model file which is already trained.
 #model = joblib.load('./model_train_32x32.pkl')
 
+ALLOWED_EXTENSIONS = set(['aedat4', 'aedat', 'jpg'])
+# representing upload folder
+UPLOAD_FOLDER = '/images'
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 ''' make Database using mongoDB '''
 class BuildDB:
@@ -81,9 +85,7 @@ def hello_flask(username):
     return "profile: " + username
 
 
-ALLOWED_EXTENSIONS = set(['aedat4', 'aedat'])
-# representing upload folder
-UPLOAD_FOLDER = '/images'
+
 
 def allowed_file(filename):
     # filename contains '.' and file type is allowed.
