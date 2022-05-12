@@ -120,7 +120,7 @@ def make_prediciton():
 @app.route("/send_post", methods=['POST'])
 def send_post():
     if request.method == 'POST':
-        file = request.files['file']
+        #file = request.files['file']
         string = request.form['string']
         return string
 
