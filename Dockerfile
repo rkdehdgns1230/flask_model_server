@@ -12,7 +12,7 @@ RUN apt-get install -y git
 RUN git clone https://github.com/bamsumit/slayerPytorch.git
 
 # install build-essential package for gcc compiler
-RUN apt install build-essential
+RUN apt install -y build-essential
 
 # install all of the modules written in requirements.txt
 RUN pip3 install -r requirements.txt
