@@ -1,5 +1,5 @@
 # 1. Flask 모듈을 import 한다.
-from flask import Flask, render_template, request, jsonify, url_for, redirect
+from flask import Flask, render_template, request, jsonify, url_for, redirect, make_response
 # import pymongo for using MongoDB
 from pymongo import MongoClient
 # import werkzeug.utils(>=1.0.0 version) for secure_filename method
@@ -19,6 +19,10 @@ app = Flask(__name__)
 # load the model file which is already trained.
 #model = joblib.load('./model_train_32x32.pkl')
 
+ALLOWED_EXTENSIONS = set(['aedat4', 'aedat', 'jpg'])
+# representing upload folder
+UPLOAD_FOLDER = '/images'
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 ''' make Database using mongoDB '''
 class BuildDB:
@@ -81,9 +85,7 @@ def hello_flask(username):
     return "profile: " + username
 
 
-ALLOWED_EXTENSIONS = set(['aedat4', 'aedat'])
-# representing upload folder
-UPLOAD_FOLDER = '/images'
+
 
 def allowed_file(filename):
     # filename contains '.' and file type is allowed.
@@ -98,15 +100,25 @@ def make_prediciton():
     # check HTTP method using request object.
     if request.method == 'POST':
 
+        if "file" not in request.files:
+            return "No file in your request!"
+
         # 업로드 파일 처리 분기
         file = request.files['file']
+        string = request.form['string']
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+            try:
+                fileName = secure_filename(file.filename)
+                file.save("./images/" + fileName)
+                return fileName
+            except:
+                return "file save error!", 200
             # os.path.join method return UPLOAD_FOLDER/filename
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            #file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-            return redirect(url_for('uploaded_file', filename=filename))
-
+            '''
+            model should be imported in this section
+            '''
             label = '3'
             # 숫자가 10인 경우 0으로 처리한다.
             if(label == '10'):
@@ -120,16 +132,22 @@ def make_prediciton():
 @app.route("/send_post", methods=['POST'])
 def send_post():
     if request.method == 'POST':
+<<<<<<< HEAD
         #file = request.files['file']
+=======
+        if "file" not in request.files:
+            return "No file in your request!"
+        file = request.files['file']
+>>>>>>> e313a253e547614a88fe81f4007f79235810fa7b
         string = request.form['string']
-        return string
-
-        fileName = secure_filename(file.filename);
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], fileName))
-
-        return "Complete"
+        try:
+            fileName = secure_filename(file.filename)
+            file.save("./images/" + fileName)
+            return fileName
+        except:
+            return "file save error!", 200
     else:
-        return "No File!"
+        return "No File!", 200
 '''
 @app.route("/upload", methods=['POST'])
 def upload():
@@ -151,10 +169,24 @@ def upload():
     return jsonify({'msg': 'save complete'})
 '''
 
+@app.route('/show/<string:filename>', methods=['GET'])
+def showResult(filename):
+    file_dir = os.path.join("./upload")
+    if request.method == 'GET':
+        if filename is None:
+            pass
+        else:
+            image_data = open(os.path.join(file_dir, '%s' % filename), "rb").read()
+            response = make_response(image_data)
+            response.headers['Content-Type'] = 'image/png'
+            return response
+    else:
+        pass
+
 # 5. 메인 모듈로 실행할 때 플라스크 서버가 구동된다. (서버로 구동한 IP와 포트를 옵션으로 넣어줄 수 있다.)
 local_addr = "127.0.0.1"
 open_addr = "0.0.0.0"
-port_num = "8080"
+port_num = "5000"
 
 if __name__ == '__main__':
-    app.run(host=open_addr, port=port_num, debug=True)
+    app.run(host=open_addr)
